@@ -1,0 +1,15 @@
+body {
+    background-color: #f70505; /* тёмный фон */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+p {
+    color: #00ffcc;   /* цвет текста */
+    font-size: 28px;  /* размер шрифта */
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
