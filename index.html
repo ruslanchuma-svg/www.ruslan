@@ -4,55 +4,122 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Smart Shop</title>
-  <link rel="stylesheet" href="css/rusla.css">
+  <link rel="stylesheet" href="rusla.css">
+
+  <style>
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      width: 300px;
+    }
+
+    .card img {
+      width: 100%;
+      border-radius: 10px;
+    }
+
+    .card {
+      width: 220px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      margin: 10px;
+      display: inline-block;
+      vertical-align: top;
+    }
+  </style>
 </head>
+
 <body>
 
 <header>
+  <button id="cartButton">🛒 Корзина (<span id="cartCount">0</span>)</button>
   <div class="logo">SmartShop</div>
-
   <input type="text" id="search" placeholder="Поиск товара...">
-
 </header>
 
-<section class="hero">
-  <h1>Интернет-магазин</h1>
-  <p>Телефоны, компьютеры и техника</p>
-</section>
+<section class="products">
 
-<section class="products" id="products">
-
-  <div class="card" data-name="телефон iphone смартфон">
-    <img src="https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=400" alt="">
-    <h3>Телефон iPhone</h3>
-    <p>Категория: Телефоны</p>
-    <button>Купить</button>
+  <div class="card">
+    <img src="https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=400">
+    <h3>iPhone</h3>
+    <button class="buyBtn">Купить</button>
   </div>
 
-  <div class="card" data-name="телефон samsung смартфон">
-    <img src="https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400" alt="">
+  <div class="card">
+    <img src="https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400">
     <h3>Samsung Galaxy</h3>
-    <p>Категория: Телефоны</p>
-    <button>Купить</button>
+    <button class="buyBtn">Купить</button>
   </div>
 
-  <div class="card" data-name="компьютер pc laptop">
-    <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400" alt="">
+  <div class="card">
+    <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400">
     <h3>Ноутбук HP</h3>
-    <p>Категория: Компьютеры</p>
-    <button>Купить</button>
+    <button class="buyBtn">Купить</button>
   </div>
 
-  <div class="card" data-name="компьютер gaming pc">
-    <img src="https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=400" alt="">
+  <div class="card">
+    <img src="https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=400">
     <h3>Gaming PC</h3>
-    <p>Категория: Компьютеры</p>
-    <button>Купить</button>
+    <button class="buyBtn">Купить</button>
   </div>
 
 </section>
+
+<!-- 📦 ОФОРМЛЕНИЕ ЗАКАЗА -->
+<section class="order">
+  <h2>Оформление заказа</h2>
+
+  <form id="orderForm">
+    <input type="text" id="name" placeholder="Ваше имя">
+    <input type="text" id="phone" placeholder="Телефон">
+    <input type="text" id="address" placeholder="Адрес">
+    <button type="submit">Отправить</button>
+  </form>
+</section>
+
+<!-- 🪟 ТОВАР -->
+<div id="productModal" class="modal">
+  <div class="modal-content">
+    <h3 id="productTitle"></h3>
+
+    <button id="addCart">Добавить в корзину</button>
+    <button id="buyNow">Купить сейчас</button>
+    <br>
+    <button onclick="closeProductModal()">Закрыть</button>
+  </div>
+</div>
+
+<!-- 🛒 КОРЗИНА -->
+<div id="cartModal" class="modal">
+  <div class="modal-content">
+    <h3>Корзина</h3>
+
+    <ul id="cartList"></ul>
+    <p id="emptyText">Корзина пустая</p>
+
+    <button onclick="closeCart()">Закрыть</button>
+  </div>
+</div>
 
 <script>
+let cart = [];
+let selectedProduct = "";
+
+/* ===== ПОИСК ===== */
 const search = document.getElementById("search");
 const cards = document.querySelectorAll(".card");
 
@@ -60,14 +127,83 @@ search.addEventListener("input", function () {
   const value = this.value.toLowerCase();
 
   cards.forEach(card => {
-    const name = card.getAttribute("data-name");
-
-    if (name.includes(value)) {
-      card.style.display = "block";
-    } else {
-      card.style.display = "none";
-    }
+    const name = card.querySelector("h3").innerText.toLowerCase();
+    card.style.display = name.includes(value) ? "inline-block" : "none";
   });
+});
+
+/* ===== ТОВАР ===== */
+const productModal = document.getElementById("productModal");
+const productTitle = document.getElementById("productTitle");
+
+document.querySelectorAll(".buyBtn").forEach(btn => {
+  btn.addEventListener("click", function () {
+    selectedProduct = this.parentElement.querySelector("h3").innerText;
+    productTitle.innerText = selectedProduct;
+    productModal.style.display = "flex";
+  });
+});
+
+function closeProductModal() {
+  productModal.style.display = "none";
+}
+
+document.getElementById("addCart").addEventListener("click", () => {
+  cart.push(selectedProduct);
+  updateCart();
+  closeProductModal();
+});
+
+document.getElementById("buyNow").addEventListener("click", () => {
+  alert("Куплено: " + selectedProduct);
+  closeProductModal();
+});
+
+/* ===== КОРЗИНА ===== */
+const cartModal = document.getElementById("cartModal");
+const cartButton = document.getElementById("cartButton");
+const cartList = document.getElementById("cartList");
+const cartCount = document.getElementById("cartCount");
+const emptyText = document.getElementById("emptyText");
+
+cartButton.addEventListener("click", () => {
+  cartModal.style.display = "flex";
+  updateCart();
+});
+
+function closeCart() {
+  cartModal.style.display = "none";
+}
+
+function updateCart() {
+  cartList.innerHTML = "";
+
+  cart.forEach(item => {
+    let li = document.createElement("li");
+    li.innerText = item;
+    cartList.appendChild(li);
+  });
+
+  cartCount.innerText = cart.length;
+
+  emptyText.style.display = cart.length === 0 ? "block" : "none";
+}
+
+/* ===== ОФОРМЛЕНИЕ ===== */
+document.getElementById("orderForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const name = document.getElementById("name").value;
+  const phone = document.getElementById("phone").value;
+  const address = document.getElementById("address").value;
+
+  if (!name || !phone || !address) {
+    alert("Заполни все поля!");
+    return;
+  }
+
+  alert("Заказ оформлен, " + name + "!");
+  this.reset();
 });
 </script>
 

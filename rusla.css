@@ -1,0 +1,141 @@
+body {
+  font-family: Arial;
+  margin: 0;
+  background: #f5f5f5;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  background: #222;
+  color: white;
+}
+
+#search {
+  padding: 8px;
+  width: 200px;
+}
+
+.hero {
+  text-align: center;
+  padding: 30px;
+  background: #ddd;
+}
+
+/* 🔥 СЕТКА */
+.products {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+/* 🔥 КАРТОЧКА */
+.card {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+button {
+  padding: 10px;
+  border: none;
+  background: #007bff;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #0056b3;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 300px;
+  margin: 20px auto;
+}
+
+form input {
+  padding: 10px;
+}
+
+form button {
+  padding: 10px;
+  background: green;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+.order {
+  background: #fff;
+  padding: 30px;
+  margin: 20px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+#orderForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 300px;
+  margin: 20px auto;
+}
+
+#orderForm input {
+  padding: 10px;
+}
+
+#orderForm button {
+  padding: 10px;
+  background: green;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+.cart {
+  position: fixed;
+  right: 20px;
+  top: 80px;
+  width: 250px;
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  display: none;
+}
+
+.cart ul {
+  list-style: none;
+  padding: 0;
+}
+
+.cart li {
+  padding: 5px 0;
+  border-bottom: 1px solid #eee;
+}
+
+#cartButton {
+  background: orange;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  color: white;
+  border-radius: 5px;
+}
